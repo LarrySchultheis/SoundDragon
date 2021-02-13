@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+<body style="background: white;">
+
+    <h1>Hello World!</h1>
+    <p>
+        We are using node <script>document.write(process.versions.node)</script>,
+        Chrome <script>document.write(process.versions.chrome)</script>,
+        and Electron <script>document.write(process.versions.electron)</script>.
+    </p>
+    <input type="button" id="playBtn" value="Play" onclick="foo()" />
+
+    <script>
+        var ipc = require('electron').ipcRenderer
+        var button = document.getElementById("playBtn")
+        button.addEventListener('click', function(){
+            ipc.once('actionReply', function(event, response){
+                procesResponse(response)
+            })
+            ipc.send('invokeAction', 'someData')
+        })
+    </script>
+</body>
+</html>
